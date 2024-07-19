@@ -1,8 +1,8 @@
 import mongoose from "mongoose"
 import OrderModel from "./models/order.model.js"
 
-const main = async () => {
-    mongoose.connect("mongodb+srv://LLBdeveloper:admiadmi@cluster0.kdv9gnv.mongodb.net/Pizzalandia?retryWrites=true&w=majority&appName=Cluster0")
+// const main = async () => {
+    
 
     // const resultado = await OrderModel.aggregate([
     //     {
@@ -45,7 +45,7 @@ const main = async () => {
     // ])
     // console.log(resultado)
 
-}
+// }
 
 // main()
 
@@ -55,15 +55,43 @@ import exphbs from "express-handlebars"
 const app = express()
 const PUERTO = 8080
 
-app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+mongoose.connect("mongodb+srv://LLBdeveloper:admiadmi@cluster0.kdv9gnv.mongodb.net/Pizzalandia?retryWrites=true&w=majority&appName=Cluster0")
 
-app.engine("handlebars", exphbs.engine())
-app.set("view engine", "handlebars")
-app.set("views","./src/views")
 
-app.get("/pizza", (req, res) => {
-    res.render("pizzas")
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.engine("handlebars", exphbs.engine());
+app.set("view engine", "handlebars");
+app.set("views", "./src/views");
+
+
+
+app.get("/pizzas", async (req, res) => {
+    const page = req.query.page || 1
+    const limit = 2
+
+    try {
+        const pizzasListado = await OrderModel.paginate({},{limit, page})
+        
+        let arrayPizzas = pizzasListado.docs.map( pizza => {
+            const { _id, ...rest } = pizza.toObject()
+                return rest
+        })
+
+        res.render("pizzas", {
+            pizzas: arrayPizzas,
+            hasPrevPage: pizzasListado.hasPrevPage, 
+            hasNextPage: pizzasListado.hasNextPage,
+            prevPage: pizzasListado.prevPage,
+            nextPage: pizzasListado.nextPage,
+            currentPage: pizzasListado.page,
+            totalPages: pizzasListado.totalPages
+        })
+    } catch (error){
+        console.log("error al pedir pizzas", error)
+        res.status(500).send("error en el servidor")
+    }
 })
 
 app.listen(PUERTO, ()=>{
