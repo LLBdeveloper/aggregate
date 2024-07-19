@@ -50,10 +50,6 @@ const main = async () => {
 // main()
 
 
-
-
-
-
 import express from "express" 
 import exphbs from "express-handlebars"
 const app = express()
@@ -67,9 +63,10 @@ app.set("view engine", "handlebars")
 app.set("views","./src/views")
 
 app.get("/pizza", (req, res) => {
-    res.send('hola mundo')
+    res.render("pizzas")
 })
 
 app.listen(PUERTO, ()=>{
     console.log(`escuchando en el puerto ${PUERTO}`)
 })
+
