@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import paginate from "mongoose-paginate-v2"
 
 const orderSchema = new mongoose.Schema({
     nombre: String,
@@ -6,6 +7,8 @@ const orderSchema = new mongoose.Schema({
     precio: Number,
     cantidad: Number
 })
+
+orderSchema.plugin(paginate)
 
 const OrderModel = mongoose.model("orders", orderSchema)
 
