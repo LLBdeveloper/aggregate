@@ -10,11 +10,11 @@
 
 
 {{#if hasPrevPage}}
-    <a href="">Anterior</a>
+    <a href="/pizzas?page={{prevPage}}">Anterior</a>
 {{/if}}
 
 {{#if hasNextPage}}
-    <a href="">Siguiente</a>
+    <a href="/pizzas?page={{nextPage}}">Siguiente</a>
 {{/if}}
 
 <p>  Pagina {{currentPage}} de {{totalPages}}  </p>
