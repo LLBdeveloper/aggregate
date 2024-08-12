@@ -90,7 +90,7 @@ app.get("/pizzas", async (req, res) => {
         })
     } catch (error){
         console.log("error al pedir pizzas", error)
-        res.status(500).send("error en el servidor")
+        res.status(500).send("error en el interno servidor")
     }
 })
 
